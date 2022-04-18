@@ -11,7 +11,14 @@ jobs:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
-        os: [ubuntu-latest, windows-latest, macos-latest]
+        os: [ubuntu-latest, macos-latest, windows-latest]
+        include:
+          - os: ubuntu-latest
+            filename: hexfile
+          - os: macos-latest
+            filename: hexfile
+          - os: windows-latest
+            filename: hexfile.exe
     steps:
     - uses: actions/checkout@v3
     - name: Set up Go
@@ -20,3 +27,7 @@ jobs:
         go-version: 1.18
     - name: Build
       run: go build -v .
+    - name: Publish Release
+      uses: softprops/action-gh-release@v1
+      with: 
+        files: ${{ matrix.filename }}
